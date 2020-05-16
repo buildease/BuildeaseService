@@ -1,0 +1,45 @@
+followed video: https://www.youtube.com/watch?v=U4BGcqUQOnM
+npm init --y
+npm i bcryptjs body-parser concurrently express is-empty jsonwebtoken mongoose passport passport-jwt validator
+npm i nodemon
+RUN: nodemon index.js
+http://localhost:5000/api/users/register(POST)
+{
+	"name":"Giri",
+	"email":"giri@gmail.com",
+	"password":"123@"
+}
+http://localhost:5000/api/users/login(POST)
+{
+	"email":"giri@gmail.com",
+	"password":"123@"
+}
+
+npm i mailgun-js
+
+http://localhost:5000/api/users/forgot-password(PUT)
+
+{
+	"email":"giribabu453@gmail.com"
+}
+
+
+npm i --save lodash
+
+http://localhost:5000/api/users/reset-password(PUT)
+{
+	"newPass":"test12345",
+	"resetOtp":"422846"
+}
+
+http://localhost:5000/api/architecture/page=2&limit=3(GET)
+
+
+http://localhost:5000/api/architecture(POST)
+{
+	"architectureName":"Archtecture",
+	"architectureDescription":"archtecture description"
+}
+
+npm i nodemon
+npm install -g nodemon
