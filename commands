@@ -43,3 +43,127 @@ http://localhost:5000/api/architecture(POST)
 
 npm i nodemon
 npm install -g nodemon
+
+
+
+/// new api's with Authorization///
+1. http://localhost:5000/architecture/5ec91b72fd8a1452dc7a2008(DELETE)
+
+2. http://localhost:5000/architecture/5ec91b72fd8a1452dc7a2008(GET)
+
+3. http://localhost:5000/architecture/list(GET)
+
+pagination:
+4. http://localhost:5000/architecture?page=1(GET)
+
+5. http://localhost:5000/architecture/update(PUT)	
+INPUTS:
+{
+	"architectureId":"5ec91b72fd8a1452dc7a2008",
+	"name":"architecture5",
+	"description":"architecture description",
+	"imgUrl":"https://media.architecturaldigest.com/photos/5eb1a5f0f7a346022caf3eb2/16:9/w_768/Bosjes%2520_001.jpg"
+}
+
+6. http://localhost:5000/architecture/insert(POST)
+INPUTS:
+{
+	"name":"architecture4",
+	"description":"architecture of description",
+	"imgUrl":"https://static.dezeen.com/uploads/2009/10/Tatiana-Bilbao-sq2.jpg"
+}
+
+////////////////////
+7. http://localhost:5000/construction/5ec91b72fd8a1452dc7a2008(DELETE)
+
+8. http://localhost:5000/construction/5ec91b72fd8a1452dc7a2008(GET)
+
+9. http://localhost:5000/construction/list(GET)
+
+pagination:
+10. http://localhost:5000/construction?page=1(GET)
+
+11. http://localhost:5000/construction/update(PUT)	
+INPUTS:
+{
+	"constructionId":"5ec91b72fd8a1452dc7a2008",
+	"name":"construction1",
+	"description":"construction description",
+	"imgUrl":"https://media.architecturaldigest.com/photos/5eb1a5f0f7a346022caf3eb2/16:9/w_768/Bosjes%2520_001.jpg"
+}
+
+12. http://localhost:5000/construction/insert(POST)
+INPUTS:
+{
+	"name":"construction",
+	"description":"construction of description",
+	"imgUrl":"https://static.dezeen.com/uploads/2009/10/Tatiana-Bilbao-sq2.jpg"
+}
+
+/////////////////////////
+13. http://localhost:5000/interiordesign/5ec91b72fd8a1452dc7a2008(DELETE)
+
+14. http://localhost:5000/interiordesign/5ec91b72fd8a1452dc7a2008(GET)
+
+15. http://localhost:5000/interiordesign/list(GET)
+
+pagination:
+16. http://localhost:5000/interiordesign?page=1(GET)
+
+17. http://localhost:5000/interiordesign/update(PUT)	
+INPUTS:
+{
+	"interiordesignId":"5ec91b72fd8a1452dc7a2008",
+	"name":"interiordesign1",
+	"description":"interiordesign description",
+	"imgUrl":"https://media.architecturaldigest.com/photos/5eb1a5f0f7a346022caf3eb2/16:9/w_768/Bosjes%2520_001.jpg"
+}
+
+18. http://localhost:5000/interiordesign/insert(POST)
+INPUTS:
+{
+	"name":"interiordesign",
+	"description":"interiordesign of description",
+	"imgUrl":"https://static.dezeen.com/uploads/2009/10/Tatiana-Bilbao-sq2.jpg"
+}
+
+/////////////////////////
+
+20. http://localhost:5000/user/login(POST)
+INPUTS:
+{
+	"email":"giribabu453@gmail.com",
+	"password":"test123"
+}
+
+21. http://localhost:5000/user/forgot-password(PUT)
+INPUTS:
+{
+"email":"giribabu453@gmail.com"
+}
+
+22. http://localhost:5000/user/reset-password(PUT)
+INPUTS:
+{
+	"newPass":"test",
+	"resetOtp":"7851"
+}
+
+23. http://localhost:5000/user/5ec82464e99f98516cfa72c1(DELETE)
+
+24. http://localhost:5000/user/update(PUT)
+INPUTS:
+{
+	"userId":"5ec89e95ae206a39b431b041",
+	"name":"Giri",
+	"email":"giribabu453@gmail.com"
+}
+
+25. http://localhost:5000/user/register(POST)
+{
+	"name":"ravi",
+	"email":"ravi@gmail.com",
+	"password":"test123"
+}
+
+

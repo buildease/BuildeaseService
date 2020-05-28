@@ -10,9 +10,9 @@ const nodemailer = require("nodemailer");
 const _ = require('lodash');
 const Architecture = require("../../models/architecture")
 
+const limitValue = 6;
 
 router.post('/architecture', (req, res) => {
-    // console.log(req.body)
     const { errors, isValid } = validator.architectureValidator(req.body);
     if (!isValid) {
         res.status(404).json(errors);
@@ -30,48 +30,21 @@ router.post('/architecture', (req, res) => {
         })
 })
 
-
 router.get('/architecture', (req, res) => {
+    const page = parseInt(req.query.page);
+    console.log(page);
+    Architecture.find({}, { "__v": 0 }, { skip: (page * limitValue), limit: limitValue }, function (err, results) {
+        res.status(200).json(results);
+    });
+})
 
-    // const page = parseInt(req.query.page)
-    // const limit = parseInt(req.query.limit)
-    // const startIndex = (page - 1) * limit
-    // const endIndex = page * limit
-
-    Architecture.find()
-        .select("architectureName _id architectureDescription")
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                architectures: docs.map(doc => {
-                    return {
-                        architectureName: doc.architectureName,
-                        architectureDescription: doc.architectureDescription,
-                        _id: doc._id,
-                    }
-                })
-            }
-            // const results = {}
-            // if(endIndex < response.length){
-            //     results.next = {
-            //         page:page + 1,
-            //         limit: limit
-            //     }
-            // }
-            // if(startIndex >0){
-            //     results.previous = {
-            //         page:page - 1,
-            //         limit: limit
-            //     }
-            // }
-            // results.results = response.slice(startIndex, endIndex)
-            res.status(200).json(response);
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+router.delete('/architecture/:id', function (req, res) {
+    Architecture.remove({
+        _id: req.params.id
+    }, function (err, architecture) {
+        if (err) return res.send(err);
+        res.json({ message: 'Architecture Deleted' });
+    });
 });
+
 module.exports = router;

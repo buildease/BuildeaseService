@@ -56,21 +56,14 @@ router.post('/login', (req, res) => {
         })
 })
 
-router.delete("/:userId", (req, res, next) => {
-    console.log(req.body)
-    Users.remove({_id: req.params.userId})
-    .exec()
-    .then(result =>{
-        res.status(200).json({
-            message:"User deleted"
-        })
-    })
-    .catch(err =>{
-        res.status(500).json({
-            error:err
-        })
+router.delete('/:id', function (req, res) {
+    Users.remove({
+        _id: req.params.id
+    }, function (err, users) {
+        if (err) return res.send(err);
+        res.json({ message: 'Users Deleted' });
     });
-})
+});
 
 router.post('/register', (req, res) => {
     const { errors, isValid } = validator.registerValidator(req.body);

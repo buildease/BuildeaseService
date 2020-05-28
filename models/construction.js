@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const architectureSchema = new Schema({
+const constructionSchema = new Schema({
     name:{
         type:String
     },
     description:{
         type:String
     },
-    imgUrl:{
+    ImgUrl:{
         type:String
     },
     date:{
@@ -17,5 +17,5 @@ const architectureSchema = new Schema({
     }
 });
 
-var collectionName = 'architecture'
-module.exports = Architecture = mongoose.model("Architecture", architectureSchema, collectionName);
+var collectionName = 'construction'
+module.exports = Construction = mongoose.model("Construction", constructionSchema, collectionName);
