@@ -147,7 +147,7 @@ INPUTS:
 {
 	"newPass":"test",
 	"resetOtp":"7851"
-}
+}	
 
 23. http://localhost:5000/user/5ec82464e99f98516cfa72c1(DELETE)
 

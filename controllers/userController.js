@@ -8,7 +8,7 @@ const nodemailer = require("nodemailer");
 const _ = require('lodash');
 
 exports.login = function (req, res, next) {
-    User.findOne({ email: req.body.email },
+    User.findOne({ email: req.body.email, password: req.body.password },
         (err, user) => {
             if (user) {
                 const token = jwt.sign({ _id: user._id }, config.secret, { expiresIn: config.tokenLife });
@@ -42,22 +42,65 @@ exports.register = function (req, res, next) {
                 const registerUser = new User({
                     name: req.body.name,
                     email: req.body.email,
+                    number: req.body.number,
                     password: req.body.password,
                     accessToken: ''
                 })
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(registerUser.password, salt, (err, hash) => {
-                        if (err) throw err; 
+                        if (err => {throw err}) 
                         registerUser.password = hash;
                         registerUser
                             .save()
-                            .then((user) => res.json(user))
+                            .then((user) => {
+                                res.json(user)
+
+                                var digits = '0123456789';
+                                let OTP = '';
+                                for (let i = 0; i < 4; i++) {
+                                    OTP += digits[Math.floor(Math.random() * 10)];
+                                }
+                                var smtpTransport = nodemailer.createTransport({
+                                    service: "Gmail",
+                                    secure: false,
+                                    auth: {
+                                        user: "giribabu453@gmail.com",
+                                        pass: "babu453@"
+                                    }
+                                });
+
+                                var mailOptions = {
+                                    from: "Fred Foo ✔ <giribabu453@gmail.com>",
+                                    to: registerUser.email,
+                                    subject: "Reset password OTP ✔",
+                                    text: "Buildease-Service ✔",
+                                    html: `<b>Your OTP  ${OTP}. </b>`
+                                }
+
+                                return user.updateOne({ resetOtp: OTP }, function (err, success) {
+                                    if (err) {
+                                        return res.status(400).json({ error: "reset password error." });
+                                    } else {
+                                        smtpTransport.sendMail(mailOptions, function (error, response) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                return res.json({ message: 'Email has been sent, kindly follow instructions' });
+                                            }
+                                        });
+
+                                    }
+                                })
+                            })
                             .catch((err) => console.log(err));
                     })
                 })
             }
         })
 }
+
+
+
 
 exports.forgotPassword = function (req, res, next) {
     const { email } = req.body;
@@ -106,7 +149,26 @@ exports.forgotPassword = function (req, res, next) {
     })
 }
 
-exports.resetPassword = function (req, res, next) {
+exports.registeredOtp = function (req, res, next) {
+    console.log(req.body, "body");
+    const { resetOtp } = req.body;
+    if (resetOtp) {
+        User.findOne({ resetOtp }, (err, user) => {
+            if (err || !user) {
+                return res.status(400).json({ error: "User with this otp does not exists." });
+            }
+            user.resetOtp = '';
+            user.save()
+                .then((user) => { return res.status(200).json({ message: 'Successfully Registered with otp' }) })
+                .catch((err) => { return res.status(400).json({ error: "registered otp error" }) });
+
+        })
+    } else {
+        return res.status(401).json({ error: "Authentication error!!!" });
+    }
+}
+
+exports.resetPasswordotp = function (req, res, next) {
     console.log(req.body, "body");
     const { resetOtp, newPass } = req.body;
     console.log(req.body.password, "password");
@@ -115,19 +177,52 @@ exports.resetPassword = function (req, res, next) {
             if (err || !user) {
                 return res.status(400).json({ error: "User with this otp does not exists." });
             }
+            user.save()
+                .then((user) => { return res.status(200).json({ message: 'Your password has been changed' }) })
+                .catch((err) => { return res.status(400).json({ error: "reset password error" }) });
+
+            // bcrypt.genSalt(10, (err, salt) => {
+            //     bcrypt.hash(req.body.newPass, salt, (err, hash) => {
+            //         if (err) {
+            //             console.log(err)
+            //             return res.status(400).json({ error: "reset password error" })
+            //         }
+            //         user.password = hash;
+            //         user.resetOtp = '';
+            //         user
+            //             .save()
+            //             .then((user) => { return res.status(200).json({ message: 'Your password has been changed' }) })
+            //             .catch((err) => { return res.status(400).json({ error: "reset password error" }) });
+            //     })
+            // })
+        })
+    } else {
+        return res.status(401).json({ error: "Authentication error!!!" });
+    }
+}
+
+exports.resetPassword = function (req, res, next) {
+    console.log(req.body, "body");
+    const { email, newPass } = req.body;
+    console.log(req.body.password, "password");
+    if (email) {
+        User.findOne({ email }, (err, user) => {
+            if (err || !user) {
+                return res.status(400).json({ error: "User with this otp does not exists." });
+            }
 
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(req.body.newPass, salt, (err, hash) => {
-                    if (err){
+                    if (err) {
                         console.log(err)
-                        return res.status(400).json({ error: "reset password error"})
-                    } 
+                        return res.status(400).json({ error: "reset password error" })
+                    }
                     user.password = hash;
                     user.resetOtp = '';
                     user
                         .save()
-                        .then((user) =>{return res.status(200).json({ message: 'Your password has been changed' })})
-                        .catch((err) =>{return res.status(400).json({ error: "reset password error" })});
+                        .then((user) => { return res.status(200).json({ message: 'Your password has been changed' }) })
+                        .catch((err) => { return res.status(400).json({ error: "reset password error" }) });
                 })
             })
         })
