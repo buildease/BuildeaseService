@@ -8,17 +8,20 @@ const nodemailer = require("nodemailer");
 const _ = require('lodash');
 
 exports.login = function (req, res, next) {
-    User.findOne({ email: req.body.email, password: req.body.password },
+    User.findOne({ email: req.body.email},
         (err, user) => {
             if (user) {
                 const token = jwt.sign({ _id: user._id }, config.secret, { expiresIn: config.tokenLife });
                 const refreshToken = jwt.sign({ _id: user._id }, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
                 user.accessToken = token;
                 user.refreshToken = refreshToken;
+               
                 user.save((err) => {
                     if (err) {
+                        console.log(user, "user1")
                         res.send({ "Message": "error occured", "Success": false });
                     } else {
+                        console.log(user, "user2")
                         res.send({ "Success": true, "User": user });
                     }
                 });
@@ -180,21 +183,6 @@ exports.resetPasswordotp = function (req, res, next) {
             user.save()
                 .then((user) => { return res.status(200).json({ message: 'Your password has been changed' }) })
                 .catch((err) => { return res.status(400).json({ error: "reset password error" }) });
-
-            // bcrypt.genSalt(10, (err, salt) => {
-            //     bcrypt.hash(req.body.newPass, salt, (err, hash) => {
-            //         if (err) {
-            //             console.log(err)
-            //             return res.status(400).json({ error: "reset password error" })
-            //         }
-            //         user.password = hash;
-            //         user.resetOtp = '';
-            //         user
-            //             .save()
-            //             .then((user) => { return res.status(200).json({ message: 'Your password has been changed' }) })
-            //             .catch((err) => { return res.status(400).json({ error: "reset password error" }) });
-            //     })
-            // })
         })
     } else {
         return res.status(401).json({ error: "Authentication error!!!" });
